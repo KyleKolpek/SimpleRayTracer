@@ -4,6 +4,7 @@
 #include <vector>
 #include "GLM/glm.hpp"
 #include "sphere.h"
+#include "triangle.h"
 #include "light.h"
 
 #define WIDTH  800
@@ -16,7 +17,8 @@ public:
     void printScenePPM();
 
 private:
-    std::vector<Sphere> shapes;
+    std::vector<Sphere> spheres;
+    std::vector<Triangle> triangles;
     std::vector<Light> lights;
     float image[3 * WIDTH * HEIGHT];
     float *imageRows[HEIGHT];

@@ -1,4 +1,4 @@
-s scene contains two mirror balls, one centered at -2, 4, 0, radius 3
+# this scene contains two mirror balls, one centered at -2, 4, 0, radius 3
 # the other centered 3, 2, -1, radius 1.5
 # and one textured floor on the Y = -1 plane
 # the floor is expressed as two triangles. the floor's material is gold-like.

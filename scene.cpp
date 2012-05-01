@@ -4,9 +4,10 @@
 using namespace std;
 
 Scene::Scene():
-    shapes(),
+    spheres(),
+    triangles(),
     lights(),
-    ambient(0.2),
+    ambient(0.5),
     aaFactor(4)
 {
     // Set up an array of row pointers for convenience
@@ -20,7 +21,29 @@ Scene::Scene():
                    glm::vec3(0.0, 0.3, 0.3),
                    glm::vec3(0.5, 0.0, 0.5),
                    5);
-    shapes.push_back(sphere1);
+    spheres.push_back(sphere1);
+
+    // Create a triangle
+    Triangle triangle1(
+        Vertex(glm::vec3(-9.0, -9.0, -10.0),
+               glm::vec3(0.0, 0.0, 1.0),
+               glm::vec3(0.3, 0.0, 0.0),
+               glm::vec3(0.5, 0.0, 0.5),
+               glm::vec2(0.5, 0.5),
+               2.0),
+        Vertex(glm::vec3(9.0, -9.0, -10.0),
+               glm::vec3(0.0, 0.0, 1.0),
+               glm::vec3(0.0, 0.3, 0.0),
+               glm::vec3(0.5, 0.0, 0.5),
+               glm::vec2(0.5, 0.5),
+               2.0),
+        Vertex(glm::vec3(0.0, 9.0, -10.0),
+               glm::vec3(0.0, 0.0, 1.0),
+               glm::vec3(0.0, 0.0, 0.3),
+               glm::vec3(0.5, 0.0, 0.5),
+               glm::vec2(0.5, 0.5),
+               2.0));
+    triangles.push_back(triangle1);
 
     // Create a light
     Light light1(glm::vec3(0.0, 10.0, -5.0), glm::vec3(1.0, 1.0, 1.0));
@@ -91,21 +114,46 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
     glm::vec3 normalMin;
     glm::vec3 fragPos;
     glm::vec3 fragPosMin;
+    glm::vec3 diffColor;
+    glm::vec3 specColor;
+    float specCoef;
     float t;
     float tMin = 0xffff;
     int iMin;
     bool intersects = false;
+    bool intersectsSphere = true;
 
-    for(int i = 0; i < shapes.size(); ++i)
+    // Check spheres
+    for(int i = 0; i < spheres.size(); ++i)
     {
-        if(shapes[i].intersects(eye, direction, t, fragPos, normal))
+        if(spheres[i].intersects(eye, direction, t, fragPos, normal))
         {
             if(t < tMin)
             {
                 tMin = t;
-                normalMin = normal;
                 iMin = i;
+                normalMin = normal;
                 fragPosMin = fragPos;
+                intersects = true;
+            }
+        }
+    }
+
+    // Check triangles
+    glm::vec3 baryCoords;
+    glm::vec3 baryCoordsMin;
+    for(int i = 0; i < triangles.size(); ++i)
+    {
+        if(triangles[i].intersects(eye, direction, baryCoords, t, fragPos))
+        {
+            if(t < tMin)
+            {
+                tMin = t;
+                iMin = i;
+                baryCoordsMin = baryCoords;
+                normalMin = triangles[i].getNormal(baryCoords);
+                fragPosMin = fragPos;
+                intersectsSphere = false;
                 intersects = true;
             }
         }
@@ -114,26 +162,46 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
     {
         return glm::vec3(0.0);
     }
+    // Store nearest frag values
+    if(intersectsSphere)
+    {
+        diffColor = spheres[iMin].diffColor;
+        specColor = spheres[iMin].specColor;
+        specCoef  = spheres[iMin].specCoef;
+    }
+    else
+    {
+        diffColor = triangles[iMin].getDiffColor(baryCoordsMin);
+        specColor = triangles[iMin].getSpecColor(baryCoordsMin);
+        specCoef  = triangles[iMin].getSpecCoef(baryCoordsMin);
+        /*cout << "bary: " << baryCoordsMin.x << "," << baryCoords.y << "," <<
+        baryCoordsMin.z << endl;
+        cout << "diff: " << diffColor.x << "," << diffColor.y << "," <<
+        diffColor.z << endl;
+        cout << "spec: " << specColor.x << "," << specColor.y << "," <<
+        specColor.z << endl;
+        cout << "coef: " << specCoef << endl;*/
+    }
 
     glm::vec3 lightDir;
     glm::vec3 fragColor(0.0);
 
     // Ambient
-    fragColor += ambient * shapes[iMin].diffColor;
+    fragColor += ambient * diffColor;
 
     for(int i = 0; i < lights.size(); ++i)
     {
         lightDir = glm::normalize(lights[i].pos - fragPosMin);
 
         // Diffuse
-        fragColor += lights[i].color * shapes[iMin].diffColor *
+        fragColor += lights[i].color * diffColor *
                      glm::max(0.0f, glm::dot(normalMin, lightDir));
         // Specular
-        fragColor += lights[i].color * shapes[iMin].specColor *
+        fragColor += lights[i].color * specColor *
                      glm::pow(glm::max(0.0f,
                          glm::dot(-direction,
                               glm::reflect(-lightDir, normalMin))),
-                              shapes[iMin].specCoef);
+                              specCoef);
     }
 
     return fragColor;
