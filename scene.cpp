@@ -7,7 +7,7 @@ Scene::Scene():
     shapes(),
     lights(),
     ambient(0.2),
-    aaFactor(1)
+    aaFactor(4)
 {
     // Set up an array of row pointers for convenience
     for(int i = 0; i < HEIGHT; ++i)
@@ -27,6 +27,7 @@ Scene::Scene():
     lights.push_back(light1);
 
     glm::vec3 eyeCoord(0.0, 0.0, 1.5);
+    float invAAFactor = 1.0/aaFactor;
 
     // For each row
     for(int r = 0; r < HEIGHT; ++r)
@@ -34,10 +35,20 @@ Scene::Scene():
         // For each column
         for(int c = 0; c < WIDTH; ++c)
         {
-            glm::vec3 planeCoord = inverseViewport(
-                glm::vec2(1.0 * c / WIDTH, 1.0 * (HEIGHT - r) / HEIGHT));
-
-            glm::vec3 fragColor = getFragmentColor(eyeCoord, planeCoord);
+            // Multisampling
+            glm::vec3 fragColor(0.0);
+            for(int dr = 0; dr < aaFactor; ++dr)
+            {
+                for(int dc = 0; dc < aaFactor; ++dc)
+                {
+                    glm::vec3 planeCoord = inverseViewport(
+                        glm::vec2((invAAFactor * dc + 1.0 * c) / WIDTH,
+                                  (invAAFactor * dr + 1.0 * (HEIGHT - r))
+                                  / HEIGHT));
+                    fragColor += getFragmentColor(eyeCoord, planeCoord);
+                }
+            }
+            fragColor *= invAAFactor * invAAFactor;
 
             imageRows[r][c * 3]     = fragColor.x;
             imageRows[r][c * 3 + 1] = fragColor.y;

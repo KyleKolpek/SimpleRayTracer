@@ -1,7 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "GlM/glm.hpp"
+#include "GLM/glm.hpp"
 
 class Sphere
 {
