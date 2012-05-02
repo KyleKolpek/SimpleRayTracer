@@ -151,7 +151,8 @@ Scene::Scene():
                         glm::vec2((invAAFactor * dc + 1.0 * c) / WIDTH,
                                   (invAAFactor * dr + 1.0 * (HEIGHT - r))
                                   / HEIGHT));
-                    fragColor += getFragmentColor(eyeCoord, planeCoord, 1);
+                    fragColor += getFragmentColor(eyeCoord,
+                        glm::normalize(planeCoord - eyeCoord), 1);
                 }
             }
             fragColor *= invAAFactor * invAAFactor;
@@ -189,11 +190,10 @@ glm::vec3 Scene::inverseViewport(glm::vec2 const &viewportCoords)
     return glm::vec3(viewportCoords * 2.0f - glm::vec2(1.0f), 0.0f);
 }
 
-glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
-                                  glm::vec3 const &screen,
+glm::vec3 Scene::getFragmentColor(glm::vec3 const &orig,
+                                  glm::vec3 const &dir,
                                   int level)
 {
-    glm::vec3 direction(glm::normalize(screen - eye));
     glm::vec3 normal;
     glm::vec3 normalMin;
     glm::vec3 fragPos;
@@ -211,7 +211,7 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
     // Check spheres
     for(int i = 0; i < spheres.size(); ++i)
     {
-        if(spheres[i].intersects(eye, direction, t, fragPos, normal))
+        if(spheres[i].intersects(orig, dir, t, fragPos, normal))
         {
             if(t < tMin)
             {
@@ -229,7 +229,7 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
     glm::vec3 baryCoordsMin;
     for(int i = 0; i < triangles.size(); ++i)
     {
-        if(triangles[i].intersects(eye, direction, baryCoords, t, fragPos))
+        if(triangles[i].intersects(orig, dir, baryCoords, t, fragPos))
         {
             if(t < tMin)
             {
@@ -284,7 +284,7 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
         // Specular
         fragColor += lights[i].color * specColor *
                      glm::pow(glm::max(0.0f,
-                         glm::dot(-direction,
+                         glm::dot(-dir,
                               glm::reflect(-lightDir, normalMin))),
                               specCoef);
     }
@@ -300,10 +300,10 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
         return fragColor;
     }
 
-    glm::vec3 refDir = glm::reflect(direction, normalMin);
+    glm::vec3 refDir = glm::reflect(dir, normalMin);
 
     // Cheap fix to prevent some intersections
     return fragColor * (1 - refFactor) +
-        getFragmentColor(fragPosMin + 0.1f * refDir, refDir + fragPosMin, level + 1) *
+        getFragmentColor(fragPosMin + 0.1f * refDir, refDir, level + 1) *
         refFactor;
 }
