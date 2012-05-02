@@ -7,12 +7,14 @@ Sphere::Sphere(glm::vec3 const &center,
                float radius,
                glm::vec3 const &diffColor,
                glm::vec3 const &specColor,
-               float specCoef):
+               float specCoef,
+               float refFactor):
     center(center),
     radius(radius), 
     diffColor(diffColor),
     specColor(specColor),
-    specCoef(specCoef)
+    specCoef(specCoef),
+    refFactor(refFactor)
 {
 }
 

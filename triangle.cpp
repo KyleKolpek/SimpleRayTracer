@@ -1,18 +1,21 @@
 #include "triangle.h"
 #include "GLM/gtx/intersect.hpp"
+#include "image.h"
 
 Vertex::Vertex(glm::vec3 const &pos,
                glm::vec3 const &normal,
                glm::vec3 const &diffColor,
                glm::vec3 const &specColor,
                glm::vec2 const &texCoords,
-               float specCoef):
+               float specCoef,
+               float refFactor):
     pos(pos),
     normal(normal),
     diffColor(diffColor),
     specColor(specColor),
     texCoords(texCoords),
-    specCoef(specCoef)
+    specCoef(specCoef),
+    refFactor(refFactor)
 {
 }
 
@@ -21,13 +24,19 @@ Triangle::Triangle(Vertex const &vert1,
                    Vertex const &vert3):
     vert1(vert1),
     vert2(vert2),
-    vert3(vert3)
+    vert3(vert3),
+    image(NULL)
 {
     // TODO: check if this is the correct direction
     normal = glm::normalize(
              glm::cross(vert2.pos - vert1.pos, vert3.pos - vert1.pos));
     area = glm::dot(
            glm::cross(vert3.pos - vert2.pos, vert1.pos - vert2.pos ), normal);
+}
+
+Triangle::~Triangle()
+{
+    //TODO: deallocate image
 }
 
 // Intersection as described at
@@ -39,6 +48,7 @@ bool Triangle::intersects(glm::vec3 const &orig,
                           glm::vec3 &intersection)
 {
     float nd = glm::dot(normal, dir);
+
     // Intersection is at infinity
     if(nd == 0)
     {
@@ -64,24 +74,13 @@ bool Triangle::intersects(glm::vec3 const &orig,
                 normal); 
     lengths.z = glm::dot(glm::cross(vert2.pos - vert1.pos, q - vert1.pos),
                 normal);
-    if(lengths.x < 0)
-    {
-        return false;
-    }
-    if(lengths.y < 0)
-    {
-        return false;
-    }
-    if(lengths.z < 0)
+
+    if(lengths.x < 0 || lengths.y < 0 || lengths.z < 0)
     {
         return false;
     }
 
     // Compute barycentric coods
-    //baryCoords.x = lengths.x / area;
-    //baryCoords.y = lengths.y / area;
-    //baryCoords.z = lengths.z / area;
-
     baryCoords = lengths / area;
     
     intersection = q;
@@ -130,3 +129,9 @@ float Triangle::getSpecCoef(glm::vec3 const &baryCoords)
            vert3.specCoef * baryCoords.z;
 }
 
+float Triangle::getRefFactor(glm::vec3 const &baryCoords)
+{
+    return vert1.refFactor * baryCoords.x +
+           vert2.refFactor * baryCoords.y +
+           vert3.refFactor * baryCoords.z;
+}

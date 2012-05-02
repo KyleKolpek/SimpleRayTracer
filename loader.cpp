@@ -36,8 +36,9 @@ Loader::Loader(string const &filename)
             glm::vec3 specColor;
             float specCoef;
             int material;
+            float ref;
 
-            for(int i = 0; i < 4;)
+            for(int i = 0; i < 5;)
             {
                 if(ifs.good())
                 {
@@ -79,10 +80,15 @@ Loader::Loader(string const &filename)
                         ifs >> specCoef;
                         ++i;
                     }
+                    else if(!str.compare("ref:"))
+                    {
+                        ifs >> ref;
+                        ++i;
+                    }
                 }
             }
             spheres.push_back(Sphere(center, radius, diffColor, specColor,
-                specCoef));
+                specCoef, ref));
         }
         // Read a triangle
         else if(!str.compare("triangle"))

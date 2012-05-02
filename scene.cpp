@@ -1,5 +1,6 @@
 #include <iostream>
 #include "scene.h"
+#include "image.h"
 
 using namespace std;
 
@@ -8,7 +9,8 @@ Scene::Scene():
     triangles(),
     lights(),
     ambient(0.5),
-    aaFactor(4)
+    aaFactor(1),
+    maxLevels(2)
 {
     // Set up an array of row pointers for convenience
     for(int i = 0; i < HEIGHT; ++i)
@@ -17,39 +19,120 @@ Scene::Scene():
     }
     
     // Create a sphere
-    Sphere sphere1(glm::vec3(0, 0, -10), 2,
+    Sphere sphere1(glm::vec3(0, 0, -5), 2,
                    glm::vec3(0.0, 0.3, 0.3),
                    glm::vec3(0.5, 0.0, 0.5),
-                   5);
+                   5,
+                   1.0);
     spheres.push_back(sphere1);
 
-    // Create a triangle
+    // Create the back 
     Triangle triangle1(
-        Vertex(glm::vec3(-9.0, -9.0, -10.0),
+        Vertex(glm::vec3(-5.0, -5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
                glm::vec3(0.3, 0.0, 0.0),
-               glm::vec3(0.5, 0.0, 0.5),
-               glm::vec2(0.5, 0.5),
-               2.0),
-        Vertex(glm::vec3(9.0, -9.0, -10.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(0.0, 0.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(5.0, -5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
                glm::vec3(0.0, 0.3, 0.0),
-               glm::vec3(0.5, 0.0, 0.5),
-               glm::vec2(0.5, 0.5),
-               2.0),
-        Vertex(glm::vec3(0.0, 9.0, -10.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(0.0, 1.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(5.0, 5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
                glm::vec3(0.0, 0.0, 0.3),
-               glm::vec3(0.5, 0.0, 0.5),
-               glm::vec2(0.5, 0.5),
-               2.0));
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(1.0, 1.0),
+               2.0,
+               0.0));
     triangles.push_back(triangle1);
+    triangles.back().image = new Image("checkerboard.ppm");
+
+    Triangle triangle2(
+        Vertex(glm::vec3(-5.0, -5.0, -10.0),
+               glm::vec3(0.0, 0.0, 1.0),
+               glm::vec3(0.3, 0.0, 0.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(0.0, 0.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(5.0, 5.0, -10.0),
+               glm::vec3(0.0, 0.0, 1.0),
+               glm::vec3(0.0, 0.0, 0.3),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(1.0, 1.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(-5.0, 5.0, -10.0),
+               glm::vec3(0.0, 0.0, 1.0),
+               glm::vec3(0.0, 0.3, 0.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(1.0, 0.0),
+               2.0,
+               0.0));
+    triangles.push_back(triangle2);
+    triangles.back().image = new Image("checkerboard.ppm");
+
+    // Create the right side
+    Triangle triangle3(
+        Vertex(glm::vec3(5.0, -5.0, -10.0),
+               glm::vec3(-1.0, 0.0, 0.0),
+               glm::vec3(0.3, 0.0, 0.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(0.0, 0.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(5.0, -5.0, 0.0),
+               glm::vec3(-1.0, 0.0, 0.0),
+               glm::vec3(0.0, 0.3, 0.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(0.0, 1.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(5.0, 5.0, 0.0),
+               glm::vec3(-1.0, 0.0, 0.0),
+               glm::vec3(0.0, 0.0, 0.3),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(1.0, 1.0),
+               2.0,
+               0.0));
+    triangles.push_back(triangle3);
+    triangles.back().image = new Image("checkerboard.ppm");
+
+    Triangle triangle4(
+        Vertex(glm::vec3(5.0, -5.0, -10.0),
+               glm::vec3(-1.0, 0.0, 0.0),
+               glm::vec3(0.3, 0.0, 0.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(0.0, 0.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(5.0, 5.0, 0.0),
+               glm::vec3(-1.0, 0.0, 0.0),
+               glm::vec3(0.0, 0.0, 0.3),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(1.0, 1.0),
+               2.0,
+               0.0),
+        Vertex(glm::vec3(5.0, 5.0, -10.0),
+               glm::vec3(-1.0, 0.0, 0.0),
+               glm::vec3(0.0, 0.3, 0.0),
+               glm::vec3(0.5, 0.5, 0.5),
+               glm::vec2(1.0, 0.0),
+               2.0,
+               0.0));
+    triangles.push_back(triangle4);
+    triangles.back().image = new Image("checkerboard.ppm");
 
     // Create a light
-    Light light1(glm::vec3(0.0, 10.0, -5.0), glm::vec3(1.0, 1.0, 1.0));
+    Light light1(glm::vec3(0.0, 10.0, -2.5), glm::vec3(1.0, 1.0, 1.0));
     lights.push_back(light1);
 
-    glm::vec3 eyeCoord(0.0, 0.0, 1.5);
+    glm::vec3 eyeCoord(0.0, 0.0, 1.0);
     float invAAFactor = 1.0/aaFactor;
 
     // For each row
@@ -68,7 +151,7 @@ Scene::Scene():
                         glm::vec2((invAAFactor * dc + 1.0 * c) / WIDTH,
                                   (invAAFactor * dr + 1.0 * (HEIGHT - r))
                                   / HEIGHT));
-                    fragColor += getFragmentColor(eyeCoord, planeCoord);
+                    fragColor += getFragmentColor(eyeCoord, planeCoord, 1);
                 }
             }
             fragColor *= invAAFactor * invAAFactor;
@@ -107,7 +190,8 @@ glm::vec3 Scene::inverseViewport(glm::vec2 const &viewportCoords)
 }
 
 glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
-                                  glm::vec3 const &screen)
+                                  glm::vec3 const &screen,
+                                  int level)
 {
     glm::vec3 direction(glm::normalize(screen - eye));
     glm::vec3 normal;
@@ -117,6 +201,7 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
     glm::vec3 diffColor;
     glm::vec3 specColor;
     float specCoef;
+    float refFactor;
     float t;
     float tMin = 0xffff;
     int iMin;
@@ -168,19 +253,19 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
         diffColor = spheres[iMin].diffColor;
         specColor = spheres[iMin].specColor;
         specCoef  = spheres[iMin].specCoef;
+        refFactor = spheres[iMin].refFactor;
     }
     else
     {
         diffColor = triangles[iMin].getDiffColor(baryCoordsMin);
+        if(triangles[iMin].image != NULL)
+        {
+            diffColor *= triangles[iMin].image->getColor(
+                         triangles[iMin].getTexCoords(baryCoordsMin));
+        }
         specColor = triangles[iMin].getSpecColor(baryCoordsMin);
         specCoef  = triangles[iMin].getSpecCoef(baryCoordsMin);
-        /*cout << "bary: " << baryCoordsMin.x << "," << baryCoords.y << "," <<
-        baryCoordsMin.z << endl;
-        cout << "diff: " << diffColor.x << "," << diffColor.y << "," <<
-        diffColor.z << endl;
-        cout << "spec: " << specColor.x << "," << specColor.y << "," <<
-        specColor.z << endl;
-        cout << "coef: " << specCoef << endl;*/
+        refFactor  = triangles[iMin].getRefFactor(baryCoordsMin);
     }
 
     glm::vec3 lightDir;
@@ -204,5 +289,21 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &eye,
                               specCoef);
     }
 
-    return fragColor;
+    // clamp frag color
+    fragColor.x = glm::min(1.0f, fragColor.x);
+    fragColor.y = glm::min(1.0f, fragColor.y);
+    fragColor.z = glm::min(1.0f, fragColor.z);
+
+    // If we're done recursing
+    if(level >= maxLevels)
+    {
+        return fragColor;
+    }
+
+    glm::vec3 refDir = glm::reflect(direction, normalMin);
+
+    // Cheap fix to prevent some intersections
+    return fragColor * (1 - refFactor) +
+        getFragmentColor(fragPosMin + 0.1f * refDir, refDir + fragPosMin, level + 1) *
+        refFactor;
 }

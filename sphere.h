@@ -11,12 +11,14 @@ public:
     glm::vec3 diffColor;
     glm::vec3 specColor;
     float specCoef;
+    float refFactor;
 
     Sphere(glm::vec3 const &center,
            float radius,
            glm::vec3 const &diffColor,
            glm::vec3 const &specColor,
-           float specCoef);
+           float specCoef,
+           float refFactor);
     ~Sphere();
 
     bool intersects(glm::vec3 const &origin,

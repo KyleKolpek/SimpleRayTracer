@@ -3,6 +3,8 @@
 
 #include "GLM/glm.hpp"
 
+class Image;
+
 class Vertex
 {
 public:
@@ -12,13 +14,15 @@ public:
     glm::vec3 specColor;
     glm::vec2 texCoords;
     float specCoef;
+    float refFactor;
 
     Vertex(glm::vec3 const &pos,
            glm::vec3 const &normal,
            glm::vec3 const &diffColor,
            glm::vec3 const &specColor,
            glm::vec2 const &texCoords,
-           float specCoef);
+           float specCoef,
+           float refFactor);
 };
 
 class Triangle
@@ -27,12 +31,13 @@ public:
     Vertex vert1;
     Vertex vert2;
     Vertex vert3;
-    glm::vec3 normal;
-    float area;
+    Image *image;
     
     Triangle(Vertex const &vert1,
              Vertex const &vert2,
              Vertex const &vert3);
+
+    ~Triangle();
 
     bool intersects(glm::vec3 const &orig,
                     glm::vec3 const &dir,
@@ -47,8 +52,11 @@ public:
     glm::vec3 getSpecColor(glm::vec3 const &baryCoords);
     glm::vec2 getTexCoords(glm::vec3 const &baryCoords);
     float getSpecCoef(glm::vec3 const &baryCoords);
+    float getRefFactor(glm::vec3 const &baryCoords);
 
 private:
+    glm::vec3 normal;
+    float area;
 };
 
 #endif
