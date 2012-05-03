@@ -31,6 +31,7 @@ private:
     glm::vec3 getFragmentColor(glm::vec3 const &orig,
                                glm::vec3 const &dir,
                                int level);
+    bool checkRayIntersection(glm::vec3 orig, glm::vec3 lightPos);
 };
 
 #endif

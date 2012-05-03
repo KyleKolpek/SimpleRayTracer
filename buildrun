@@ -1,2 +1,5 @@
 #!/bin/bash
-g++ *.cpp && ./a.out | convert - test.png && open test.png
+set -e
+echo "Building"
+g++ *.cpp
+./run $1
