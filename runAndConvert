@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+if [ $# != 1 ]
+then
+    echo "Syntax: $0 outfile"
+    exit 1
+fi
+echo "Running Tracer"
+time ./rayTracer | convert - $1
+echo "Opening $1"
+open $1
