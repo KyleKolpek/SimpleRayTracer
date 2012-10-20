@@ -1,6 +1,7 @@
 # Ray Tracer
 ## UKY - CS 535: Intermediate Computer Graphics
 
+### Description
 This program implements all of the basic requirements of the program
 specifications. This includes:
 
@@ -17,7 +18,8 @@ I also implemented the following extra requirements:
 * Shadow Rays
 
 I have included various images of my progress in the image directory  as
-progress*.png. My final scenes are available in the same directory as scene*.png
+progress\*.png. My final scenes are available in the same directory as
+scene\*.png
 
 My texture images are loaded as a subset of PPM images. I make use of
 imagemagick's `convert` tool to create these from other images.
@@ -36,3 +38,9 @@ function.
 I also used the GLM library for it's vector utilities. It has flaws
 (sphere intersection code doesn't work, for example) but it provides a generally
 solid, readable set of utilities to work with.
+
+### Sample Scenes
+![Scene 1](https://github.com/KyleKolpek/SimpleRayTracer/blob/master/images/scene1.png?raw=true)
+
+
+![Scene 2](https://github.com/KyleKolpek/SimpleRayTracer/blob/master/images/scene2.png?raw=true)
