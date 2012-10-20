@@ -24,255 +24,125 @@ Scene::Scene():
                    glm::vec3(0.0, 0.3, 0.3),
                    glm::vec3(0.5, 0.0, 0.5),
                    4.0,
-                   1.0);
+                   0.4);
     spheres.push_back(sphere1);
+
+    Sphere sphere2(glm::vec3(2.5, 2.5, -7.5), 1.5,
+                   glm::vec3(0.0, 0.3, 0.3),
+                   glm::vec3(0.5, 0.0, 0.5),
+                   4.0,
+                   1.0);
+    spheres.push_back(sphere2);
+
+    Sphere sphere3(glm::vec3(2.5, -1, -2.5), 1,
+                   glm::vec3(0.4, 0.1, 0.1),
+                   glm::vec3(0.5, 0.5, 0.5),
+                   4.0,
+                   0.0);
+    spheres.push_back(sphere3);
 
     // Create the back 
     Triangle triangle1(
         Vertex(glm::vec3(-5.0, -5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
-               glm::vec3(1.0, 1.0, 1.0),
+               glm::vec3(0.0, 0.5, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(0.0, 0.0),
                2.0,
                0.0),
         Vertex(glm::vec3(5.0, -5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
-               glm::vec3(1.0, 1.0, 1.0),
+               glm::vec3(0.5, 0.0, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(1.0, 0.0),
                2.0,
                0.0),
         Vertex(glm::vec3(5.0, 5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
-               glm::vec3(1.0, 1.0, 1.0),
+               glm::vec3(0.0, 0.5, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(1.0, 1.0),
                2.0,
                0.0));
     triangles.push_back(triangle1);
-    triangles.back().image = new Image("waves.ppm");
+    triangles.back().image = new Image("checkerboard.ppm");
 
     Triangle triangle2(
         Vertex(glm::vec3(-5.0, -5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
-               glm::vec3(1.0, 1.0, 1.0),
+               glm::vec3(0.5, 0.0, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(0.0, 0.0),
                2.0,
                0.0),
         Vertex(glm::vec3(5.0, 5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
-               glm::vec3(1.0, 1.0, 1.0),
+               glm::vec3(0.0, 0.5, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(1.0, 1.0),
                2.0,
                0.0),
         Vertex(glm::vec3(-5.0, 5.0, -10.0),
                glm::vec3(0.0, 0.0, 1.0),
-               glm::vec3(1.0, 1.0, 1.0),
+               glm::vec3(0.0, 0.0, 0.5),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(0.0, 1.0),
                2.0,
                0.0));
     triangles.push_back(triangle2);
-    triangles.back().image = new Image("waves.ppm");
+    triangles.back().image = new Image("checkerboard.ppm");
 
     // Create the right side
     Triangle triangle3(
         Vertex(glm::vec3(5.0, -5.0, -10.0),
                glm::vec3(-1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
+               glm::vec3(0.5, 0.0, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(0.0, 0.0),
                2.0,
-               0.5),
+               0.0),
         Vertex(glm::vec3(5.0, -5.0, 0.0),
                glm::vec3(-1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
+               glm::vec3(0.0, 0.5, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(0.0, 1.0),
                2.0,
-               0.5),
+               0.0),
         Vertex(glm::vec3(5.0, 5.0, 0.0),
                glm::vec3(-1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
+               glm::vec3(0.0, 0.0, 0.5),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(1.0, 1.0),
                2.0,
-               0.5));
+               0.0));
     triangles.push_back(triangle3);
+    triangles.back().image = new Image("checkerboard.ppm");
 
     Triangle triangle4(
         Vertex(glm::vec3(5.0, -5.0, -10.0),
                glm::vec3(-1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
+               glm::vec3(0.5, 0.0, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(0.0, 0.0),
                2.0,
-               0.5),
+               0.0),
         Vertex(glm::vec3(5.0, 5.0, 0.0),
                glm::vec3(-1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
+               glm::vec3(0.0, 0.5, 0.0),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(1.0, 1.0),
                2.0,
-               0.5),
+               0.0),
         Vertex(glm::vec3(5.0, 5.0, -10.0),
                glm::vec3(-1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
+               glm::vec3(0.0, 0.0, 0.5),
                glm::vec3(0.5, 0.5, 0.5),
                glm::vec2(1.0, 0.0),
                2.0,
-               0.5));
+               0.0));
     triangles.push_back(triangle4);
+    triangles.back().image = new Image("checkerboard.ppm");
 
-    // Create the bottom 
-    Triangle triangle5(
-        Vertex(glm::vec3(-5.0, -5.0, -10.0),
-               glm::vec3(0.0, 1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 0.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(-5.0, -5.0, 0.0),
-               glm::vec3(0.0, 1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 1.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(5.0, -5.0, 0.0),
-               glm::vec3(0.0, 1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 1.0),
-               2.0,
-               0.5));
-    triangles.push_back(triangle5);
-
-    Triangle triangle6(
-        Vertex(glm::vec3(-5.0, -5.0, -10.0),
-               glm::vec3(0.0, 1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 0.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(5.0, -5.0, 0.0),
-               glm::vec3(0.0, 1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 1.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(5.0, -5.0, -10.0),
-               glm::vec3(0.0, 1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 0.0),
-               2.0,
-               0.5));
-    triangles.push_back(triangle6);
-
-    // Create the left
-    Triangle triangle7(
-        Vertex(glm::vec3(-5.0, -5.0, 0.0),
-               glm::vec3(1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 0.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(-5.0, -5.0, -10.0),
-               glm::vec3(1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 1.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(-5.0, 5.0, -10.0),
-               glm::vec3(1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 1.0),
-               2.0,
-               0.5));
-    triangles.push_back(triangle7);
-
-    Triangle triangle8(
-        Vertex(glm::vec3(-5.0, -5.0, 0.0),
-               glm::vec3(1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 0.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(-5.0, 5.0, -10.0),
-               glm::vec3(1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 1.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(-5.0, 5.0, 0.0),
-               glm::vec3(1.0, 0.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 0.0),
-               2.0,
-               0.5));
-    triangles.push_back(triangle8);
-
-    // Create the top
-    Triangle triangle9(
-        Vertex(glm::vec3(-5.0, 5.0, -10.0),
-               glm::vec3(0.0, -1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 0.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(5.0, 5.0, -10.0),
-               glm::vec3(0.0, -1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 1.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(5.0, 5.0, 0.0),
-               glm::vec3(0.0, -1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 1.0),
-               2.0,
-               0.5));
-    triangles.push_back(triangle9);
-
-    Triangle triangle10(
-        Vertex(glm::vec3(-5.0, 5.0, -10.0),
-               glm::vec3(0.0, -1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(0.0, 0.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(5.0, 5.0, 0.0),
-               glm::vec3(0.0, -1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 1.0),
-               2.0,
-               0.5),
-        Vertex(glm::vec3(-5.0, 5.0, 0.0),
-               glm::vec3(0.0, -1.0, 0.0),
-               glm::vec3(0.3, 0.3, 0.5),
-               glm::vec3(0.5, 0.5, 0.5),
-               glm::vec2(1.0, 0.0),
-               2.0,
-               0.5));
-    triangles.push_back(triangle10);
 
     // Create a light
     Light light1(glm::vec3(0.0, 4.9, -2.5), glm::vec3(1.0, 1.0, 1.0));
@@ -464,6 +334,7 @@ glm::vec3 Scene::getFragmentColor(glm::vec3 const &orig,
 bool Scene::checkRayIntersection(glm::vec3 orig, glm::vec3 lightPos)
 {
     glm::vec3 dir = glm::normalize(lightPos - orig);
+    orig += 0.1f * dir;
     glm::vec3 normal;
     glm::vec3 fragPos;
     glm::vec3 baryCoords;
